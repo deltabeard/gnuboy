@@ -115,7 +115,7 @@ void vid_init()
 	if (!renderer) die("SDL2: can't create renderer: %s\n", SDL_GetError());
 
 	SDL_GetRendererInfo(renderer, &info);
-	fprintf(stdout, "using renderer %s\n", info.name);
+	//fprintf(stdout, "using renderer %s\n", info.name);
 
 	SDL_RenderSetScale(renderer, scale, scale);
 

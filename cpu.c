@@ -17,6 +17,8 @@
 #include "asm.h"
 #endif
 
+#include <stdio.h>
+
 
 struct cpu cpu;
 
@@ -397,10 +399,48 @@ next:
 		}
 	}
 	IME = IMA;
+
+
 	
 	if (debug_trace) debug_disassemble(PC, 1);
-	op = FETCH;
+	op = readb(PC);
 	clen = cycles_table[op];
+
+	int c, h, n, z;
+	c = F & 0x10;
+	h = F & 0x20;
+	n = F & 0x40;
+	z = F & 0x80;
+	fprintf(stdout, "PC: %02X:%04X\t"
+			"%c%c%c%c "
+			"A: %02X "
+			"BC: %04X "
+			"DE: %04X "
+			"HL: %04X "
+			"SP: %04X "
+			"LY: %04X "
+			"OP: %02X %02X %02X"
+			//"TIM: %04X "
+			//"TAC: %04X"
+			"\n",
+			mbc.rombank, PC,
+			c ? 'c' : '-',
+			h ? 'h' : '-',
+			n ? 'n' : '-',
+			z ? 'z' : '-',
+			A,
+			BC,
+			DE,
+			HL,
+			SP,
+			R_LY,
+			op,
+			readb(PC + 1),
+			readb(PC + 2)
+			//cpu.tim,
+			//R_TAC
+			);
+	PC++;
 
 	switch(op)
 	{
